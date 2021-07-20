@@ -5,7 +5,7 @@
         <div class="layui-card">
           <div class="layui-card-header">网站数据总览</div>
           <div class="layui-card-body">
-            <table class="layui-table" style="margin: 0;" lay-size="sm">
+            <table class="layui-table" style="margin: 0;">
               <colgroup>
                 <col width="200">
                 <col width="200">
@@ -29,7 +29,7 @@
                 </tr>
               </tbody>
             </table>
-            <table class="layui-table" style="margin: 0;" id="wping-index-table" lay-size="sm">
+            <table class="layui-table" style="margin: 0;" id="wping-index-table">
               <colgroup>
                 <col width="3%">
                 <col width="15%">
@@ -60,29 +60,29 @@
                   <td>{{ item.tel }}</td>
                   <td>{{ item.email }}</td>
                   <td style="font-size:0;">
-                    <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-xs">修改</a>
-                    <a href="javascript:;" class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+                    <a href="javascript:;" class="layui-btn layui-btn-normal">修改</a>
+                    <a href="javascript:;" class="layui-btn layui-btn-danger">删除</a>
                   </td>
                 </tr>
                 <tr style="background-color: #{{ item.id%2 ? 'transparent' : 'f2f2f2' }};">
                   <td rowspan="2">考核结果</td>
                   <td rowspan="2">
                   {{# if(item.kaohe == "ok"){ }}
-                    <span class="layui-badge" style="font-size: 12px;background-color: #4ac444;margin-right: 4px;">合格</span>
-                    <i class="layui-icon layui-icon-face-smile" style="font-weight: bold;vertical-align: middle; color: #4ac444;"></i>
+                    <span class="layui-badge" style="font-size: 12px;height: 24px;line-height: 24px;background-color: #4ac444;margin-right: 4px;">合格</span>
+                    <i class="layui-icon layui-icon-face-smile" style="font-size: 26px;font-weight: bold;vertical-align: middle; color: #4ac444;"></i>
                   {{# } else { }}
-                    <span class="layui-badge" style="font-size: 12px;background-color: #ff5722;margin-right: 4px;">不合格</span>
-                    <i class="layui-icon layui-icon-face-cry" style="font-weight: bold;vertical-align: middle; color: #ff5722;"></i>
+                    <span class="layui-badge" style="font-size: 12px;height: 24px;line-height: 24px;background-color: #ff5722;margin-right: 4px;">不合格</span>
+                    <i class="layui-icon layui-icon-face-cry" style="font-size: 26px;font-weight: bold;vertical-align: middle; color: #ff5722;"></i>
                   {{# } }}
                   </td>
                   <td>单项否决</td>
                   <td>
                   {{# if(item.danxiang == "ok"){ }}
-                    <span class="layui-badge" style="font-size: 12px;background-color: #4ac444;margin-right: 4px;">合格</span>
-                    <i class="layui-icon layui-icon-face-smile" style="font-weight: bold;vertical-align: middle; color: #4ac444;"></i>
+                    <span class="layui-badge" style="font-size: 12px;height: 24px;line-height: 24px;background-color: #4ac444;margin-right: 4px;">合格</span>
+                    <i class="layui-icon layui-icon-face-smile" style="font-size: 26px;font-weight: bold;vertical-align: middle; color: #4ac444;"></i>
                   {{# } else { }}
-                    <span class="layui-badge" style="font-size: 12px;background-color: #ff5722;margin-right: 4px;">不合格</span>
-                    <i class="layui-icon layui-icon-face-cry" style="font-weight: bold;vertical-align: middle; color: #ff5722;"></i>
+                    <span class="layui-badge" style="font-size: 12px;height: 24px;line-height: 24px;background-color: #ff5722;margin-right: 4px;">不合格</span>
+                    <i class="layui-icon layui-icon-face-cry" style="font-size: 26px;font-weight: bold;vertical-align: middle; color: #ff5722;"></i>
                   {{# } }}
                   </td>
                   <td rowspan="2">总得分：</td>

@@ -3,16 +3,16 @@
  *@Author GYF
  */
  body{min-width: 1040px;width: 100%;}
- html{background-color: #ecf0f5}
-.wping-indexuser{left: 0;bottom: 0;top: 0;margin: auto;padding: 0 40px;min-width: 1000px;}
+ html{background-color: #EEEEEE}
+.wping-indexuser{left: 0;bottom: 0;top: 100px;margin: auto;padding: 0 40px;min-width: 1000px;}
 /* left */
 .wping-indexuser .web-info{width: 30%;min-width: 400px;padding: 10px;margin-right: 1%;background-color: #ffffff}
 .wping-indexuser .web-info .name{font-size: 20px;margin-bottom: 20px}
-.wping-indexuser .web-info .name span{font-weight: bold;font-size: 26px;color: #094AA1}
+.wping-indexuser .web-info .name span{font-weight: bold;font-size: 26px;color: #094AAA}
 .wping-indexuser .web-info .domain{font-size: 16px;margin-bottom: 50px;}
 .wping-indexuser .web-info .name i, .wping-indexuser .web-info .domain i{margin-right: 5px}
 .wping-indexuser .web-info a{color: #1e9fff;vertical-align: middle;}
-.wping-indexuser .web-info a:hover{color: #094AA1;}
+.wping-indexuser .web-info a:hover{color: #094AAA;}
 .wping-details-row{border-bottom: 1px solid #ddd;padding: 10px 0;font-size: 20px;color: #666;}
 .wping-details-row:last-child{border: none}
 .wping-details-row .wping-details-label{width: 170px;text-align: right;float: left;line-height: 30px}
@@ -25,18 +25,17 @@
 .wping-indexuser .web-entry{font-size: 0;width: 50%;min-width: 400px;overflow: hidden;display: inline-block}
 .wping-indexuser .web-entry .layui-card-body{text-align: center}
 /* .wping-indexuser .web-entry .layui-card{margin: 0} */
-.wping-indexuserentry-item{display: inline-block;font-size: 24px;color: #094AA1;position: relative;}
+.wping-indexuserentry-item{display: inline-block;font-size: 24px;color: #094AAA;position: relative;}
 .wping-indexuserentry-item p{font-size: 16px;color: #666;}
 .wping-indexuser .web-entry .layui-badge{position: absolute;top: 0;right: 0;border: none;}
 
 
 /* indexall */
-.wping-indexall{left: 0;top: 0;bottom: 0;background-color: #ecf0f5;margin: auto;padding: 0 40px;min-width: 1000px;}
+.wping-indexall{left: 0;top: 100px;bottom: 0;background-color: #EEEEEE;margin: auto;padding: 0 40px;min-width: 1000px;}
 .wping-indextable{width: 100%;}
 .wping-indexall .layui-card-header{background-color: transparent;color: #333;border-radius: 2px 2px 0 0;font-size: 14px;font-size: 14px}
 .wping-indexall .layui-card{background-color: #fff}
 .wping-indexall .domain{color: #1e9fff}
-.wping-indexall .domain:hover{color: #094AA1;text-decoration: underline}
-.wping-indexall a.layui-btn .layui-btn-normal{background-color: #22c16d}
+.wping-indexall .domain:hover{color: #094AAA;text-decoration: underline}
 
 
