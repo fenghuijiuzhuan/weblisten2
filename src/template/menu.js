@@ -5,15 +5,21 @@
     <!-- 第1级  -->
     {{#  layui.each(d.list, function(index, item){ }}
       <li class="layui-nav-item {{ index==0?'layui-nav-itemed':'' }}">
-        <a class="{{ (item.children.length === 0 && index === 0)?'first':'' }}" href="{{ item.src }}">{{ item.text }}</a>
+        <a class="{{ (index===0 && item.children.length === 0 && index === 0)?'first':'' }}" href="javascript:;" href2="{{ item.src }}">
+          <i class="layui-icon layui-icon-triangle-r" style="color: #094AAA;{{ item.children.length ===0 && 'opacity: 0;' }}"></i>
+          &nbsp;
+          <i class="fa {{ item.children.length === 0 && 'fa-file' }}" style="color: #094AAA;"></i>
+          &nbsp;
+          {{ item.text }}
+        </a>
         {{#  if(item.children.length !== 0){ }}
         <dl class="layui-nav-child">
         {{#  layui.each(item.children, function(index_1, item_1){ }}
           <dd class="{{ index==0 && item_1.children.length  ?'layui-nav-itemed':'' }}">
-            <a class="{{ (item_1.children.length === 0 && index_1 === 0)?'first':'' }}" href="{{ item_1.src }}">
+            <a class="{{ (index===0 && item_1.children.length === 0 && index_1 === 0)?'first':'' }}" href="javascript:;" href2="{{ item_1.src }}">
               <i class="layui-icon layui-icon-triangle-r" style="color: #094AAA;{{ item_1.children.length ===0 && 'opacity: 0;' }}"></i>
               &nbsp;
-              <i class="iconfont {{ item_1.children.length === 0 ? 'icon-wenjian': 'icon-wenjianjia' }}" style="color: #094AAA;"></i>
+              <i class="fa {{ item_1.children.length === 0 ? 'fa-file': 'fa-folder' }}" style="color: #094AAA;"></i>
               &nbsp;
               {{ item_1.text }}
             </a>
@@ -22,10 +28,10 @@
             <dl class="layui-nav-child">
             {{#  layui.each(item_1.children, function(index_2, item_2){ }}
               <dd class="{{ index==0 && item_2.children.length  ?'layui-nav-itemed':'' }}">
-                <a class="{{ (item_2.children.length === 0 && index_2 === 0)?'first':'' }}" href="{{ item_2.src }}">
+                <a class="{{ (index===0 && item_2.children.length === 0 && index_2 === 0)?'first':'' }}" href="javascript:;" href2="{{ item_2.src }}">
                   <i class="layui-icon layui-icon-triangle-r" style="color: #094AAA;{{ item_2.children.length ===0 && 'opacity: 0;' }}"></i>
                   &nbsp;
-                  <i class="iconfont {{ item_2.children.length === 0 ? 'icon-wenjian': 'icon-wenjianjia' }}" style="color: #094AAA;"></i>
+                  <i class="fa {{ item_2.children.length === 0 ? 'fa-file': 'fa-folder' }}" style="color: #094AAA;"></i>
                   &nbsp;
                   {{ item_2.text }}
                 </a>
@@ -35,10 +41,10 @@
                 <dl class="layui-nav-child">
                 {{#  layui.each(item_2.children, function(index_3, item_3){ }}
                   <dd class="{{ index==0 && item_3.children.length !== 0  ?'layui-nav-itemed':'' }}">
-                    <a class="{{ (item_3.children.length === 0 && index_3 === 0)?'first':'' }}" href="{{ item_3.src }}">
+                    <a class="{{ (index===0 && item_3.children.length === 0 && index_3 === 0)?'first':'' }}" href="javascript:;" href2="{{ item_3.src }}">
                       <i class="layui-icon layui-icon-triangle-r" style="color: #094AAA;{{ item_3.children.length ===0 && 'opacity: 0;' }}"></i>
                       &nbsp;
-                      <i class="iconfont {{ item_3.children.length === 0 ? 'icon-wenjian': 'icon-wenjianjia' }}" style="color: #094AAA;"></i>
+                      <i class="fa {{ item_3.children.length === 0 ? 'fa-file': 'fa-folder' }}" style="color: #094AAA;"></i>
                       &nbsp;
                       {{ item_3.text }}
                     </a>
@@ -48,10 +54,10 @@
                     <dl class="layui-nav-child">
                     {{#  layui.each(item_3.children, function(index_4, item_4){ }}
                       <dd class="{{ index==0 && item_4.children.length !== 0  ?'layui-nav-itemed':'' }}">
-                        <a class="{{ (item_4.children.length == 0 && index_4 == 0)?'first':'' }}" href="{{ item_4.src }}">
+                        <a class="{{ (index===0 && item_4.children.length == 0 && index_4 == 0)?'first':'' }}" href="javascript:;" href2="{{ item_4.src }}">
                           <i class="layui-icon layui-icon-triangle-r" style="color: #094AAA;{{ item_4.children.length ===0 && 'opacity: 0;' }}"></i>
                           &nbsp;
-                          <i class="iconfont {{ item_4.children.length === 0 ? 'icon-wenjian': 'icon-wenjianjia' }}" style="color: #094AAA;"></i>
+                          <i class="fa {{ item_4.children.length === 0 ? 'fa-file': 'fa-folder' }}" style="color: #094AAA;"></i>
                           &nbsp;
                           {{ item_4.text }}
                         </a>

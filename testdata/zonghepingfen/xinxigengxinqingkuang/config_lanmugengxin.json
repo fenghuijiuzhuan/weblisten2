@@ -1,0 +1,106 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 5,
+	"data": [{
+		"id": 1,
+    "title": "征集调查",
+    "class": "规划计划",
+    "url": "http://www.dlt.gov.cn/dltzc2015b_80397/hdjl_80458/myzj/",
+    "controls": [
+      {
+        "text": "修改",
+        "color": "layui-btn-normal"
+      },{
+        "text": "发送任务",
+        "color": "layui-btn-normal"
+      },{
+        "text": "设置规则",
+        "color": "layui-btn-normal"
+      },{
+        "text": "删除",
+        "color": "layui-btn-danger"
+      }
+    ]
+	},{
+		"id": 2,
+    "title": "征集调查",
+    "class": "规划计划",
+    "url": "http://www.dlt.gov.cn/dltzc2015b_80397/hdjl_80458/myzj/",
+    "controls": [
+      {
+        "text": "修改",
+        "color": "layui-btn-normal"
+      },{
+        "text": "发送任务",
+        "color": "layui-btn-normal"
+      },{
+        "text": "设置规则",
+        "color": "layui-btn-normal"
+      },{
+        "text": "删除",
+        "color": "layui-btn-danger"
+      }
+    ]
+	},{
+		"id": 3,
+    "title": "征集调查",
+    "class": "规划计划",
+    "url": "http://www.dlt.gov.cn/dltzc2015b_80397/hdjl_80458/myzj/",
+    "controls": [
+      {
+        "text": "修改",
+        "color": "layui-btn-normal"
+      },{
+        "text": "发送任务",
+        "color": "layui-btn-normal"
+      },{
+        "text": "设置规则",
+        "color": "layui-btn-normal"
+      },{
+        "text": "删除",
+        "color": "layui-btn-danger"
+      }
+    ]
+	},{
+		"id": 4,
+    "title": "征集调查",
+    "class": "规划计划",
+    "url": "http://www.dlt.gov.cn/dltzc2015b_80397/hdjl_80458/myzj/",
+    "controls": [
+      {
+        "text": "修改",
+        "color": "layui-btn-normal"
+      },{
+        "text": "发送任务",
+        "color": "layui-btn-normal"
+      },{
+        "text": "设置规则",
+        "color": "layui-btn-normal"
+      },{
+        "text": "删除",
+        "color": "layui-btn-danger"
+      }
+    ]
+	},{
+		"id": 5,
+    "title": "征集调查",
+    "class": "规划计划",
+    "url": "http://www.dlt.gov.cn/dltzc2015b_80397/hdjl_80458/myzj/",
+    "controls": [
+      {
+        "text": "修改",
+        "color": "layui-btn-normal"
+      },{
+        "text": "发送任务",
+        "color": "layui-btn-normal"
+      },{
+        "text": "设置规则",
+        "color": "layui-btn-normal"
+      },{
+        "text": "删除",
+        "color": "layui-btn-danger"
+      }
+    ]
+	}]
+}

@@ -16,7 +16,7 @@ require(['/src/config/require.config.js'], function () {
       panel = Moo.panel,
       ec = Moo.ec;
     // main body
-    var bod = body.create().appendTo($('body'));
+    var bod = body.create().appendTo($('.wping-body'));
     bod.eq(1).css({
       top: 0, 
       left: 0,
@@ -25,7 +25,7 @@ require(['/src/config/require.config.js'], function () {
     var main = bod.find('.wping-bodymain');
     var content = bod.find('.wping-bodycontent');
     
-    bread.create(bod, [{title: '全媒体采编',}, {title: '已签发平台',}])
+    // bread.create(bod, [{title: '全媒体采编',}, {title: '已签发平台',}])
 
     // search-from
     // search.create(main)

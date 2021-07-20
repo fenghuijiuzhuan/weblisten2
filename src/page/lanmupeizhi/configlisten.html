@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <title>配置监测选项</title>
+  <script src="/lib/require-2.1.11.min.js"></script>
+  <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
+</head>
+<body>
+  <!-- 哎呀 什么都没有 -->
+<script>
+require(['/src/config/require.config.js'], function () {
+  require(['/src/js/content_iframe.js', 'echarts/chart/bar', 'echarts/chart/pie'], function (Moo) {
+    var body = Moo.body,
+      bread = Moo.bread,
+      bodytitle = Moo.bodytitle,
+      panel = Moo.panel,
+      ec = Moo.ec;
+    // main body
+    var bod = body.create().appendTo($('.wping-body'));
+    bod.eq(1).css({
+      top: 0, 
+      left: 0,
+      bottom: 0
+    })
+    var main = bod.find('.wping-bodymain');
+    var content = bod.find('.wping-bodycontent');
+    
+    // bread
+    // bread.create(bod, [{title: '全媒体采编',}, {title: '已签发平台',}])
+
+    // search-from
+    // search.create(main)
+    bodytitle.create(content, { title: '栏目更新配置' })
+
+
+    // 栏目更新配置table
+    var panelParam = {
+      title: '<div class="text-right main-table-title"><button class="layui-btn layui-btn-normal layui-btn-sm addrow">添加栏目</button></div>',
+      body: '<div class="main-table"><div></div></div>'
+    }
+    panel.create(content, panelParam, function (dom) {
+      var icon = dom.find('.layui-icon');
+      var tablebox = dom.find('.main-table');
+      var titlebox = dom.find('.main-table-title');
+      titlebox.prependTo(titlebox.parent());
+      layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+          elem: tablebox,
+          url: '/testdata/zonghepingfen/xinxigengxinqingkuang/config_lanmugengxin.json',
+          page: true,
+          cols: [[
+            {field: 'id', title: '序号', width:"10%"},
+            {field: 'title', title: '栏目名称', width:"20%"},
+            {field: 'class', title: '栏目分类', width:"20%"},
+            {field: 'url', title: '栏目url地址', width:"30%"},
+            {field: 'controls', title: '操作',width:"", templet: function(d){
+              var tpl = '';
+              for(var i = 0; i < d.controls.length; i++){
+                var item = d.controls[i];
+                tpl += '<button class="layui-btn layui-btn-sm '+item.color+'">'+item.text+'</button>'
+              }
+              return tpl
+            }}
+          ]]
+        })
+      })
+
+      require(['addcolumn'], function (addcolumn) {
+        addcolumn(null, {}, function (dom) {
+          layui.use('form', function(){
+            var form = layui.form;
+            form.on('submit(formDemo)', function(data){
+              // layer.msg(JSON.stringify(data.field));
+              form.reset('addColumn');
+              return false;
+            });
+          });
+          
+          titlebox.find('button.addrow').on('click', function (param) {
+            layui.use('layer', function(){
+              var layer = layui.layer;
+              layer.open({
+                type: 1,
+                area: ['600px'],
+                content: dom,
+                success: function (layero, index) {
+                  dom.find('.wping-form-cancel').on('click', function () {
+                    layer.close(index)
+                  });
+                  // dom.find('.wping-from-test').on('click', function () {
+                  //   layer.open({
+                  //     type: 1,
+                  //     title: '测试',
+                  //     area: ['600px', '260px'],
+                  //     shade: .1,
+                  //     maxmin: true,
+                  //     content: '//layer.layui.com/test/settop.html',
+                  //     btn: ['继续', '关闭'],
+                  //     yes: function(){
+                  //       $(that).click(); 
+                  //     },
+                  //     btn2: function(index){
+                  //       layer.close(index);
+                  //     },
+                  //     zIndex: layer.zIndex,
+                  //     success: function(layero){
+                  //       layer.setTop(layero); //重点2
+                  //     }
+                  //   });
+                  // })
+                },
+                end: function () {
+                  dom.find('.wping-from-test','.wping-form-cancel').off('click')
+                }
+              });
+            });
+          })
+
+        })
+
+        
+      })
+
+    })
+  })
+})
+</script>
+</body>
+</html>

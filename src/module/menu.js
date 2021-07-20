@@ -16,14 +16,20 @@ define(['util/onloadpage'], function(loadpage) {
             element.render('nav')
             element.on('nav(wping-menu)', function () {
               var hasTree = ($(this).attr('addtree') === 'true')
-              loadpage(this.href, hasTree)
+              loadpage($(this).attr('href2'), hasTree)
             })
           })
           var aArr = dom.find('a');
-          aArr.on('click', function (e) {
+          aArr.on('click', function () { return false });
+          (function (e) {
+            loadpage($(this).attr('href2'), ($(this).attr('addtree') === 'true'))
+            $(this).parent('dd,li').addClass('layui-this');
             return false;
-          })
-          dom.find('a.first:eq(0)').trigger('click').parent('dd').addClass('layui-this');
+          }).call(dom.find('a.first:eq(0)'))
+          // dom.find('a.first:eq(0)').off('click').one('click', function (e) {
+          //   loadpage($(this).attr('href2'), ($(this).attr('addtree') === 'true'))
+          //   return false;
+          // }).trigger('click').parent('dd,li').addClass('layui-this');
         }
       })
     })

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <title>配置监测选项</title>
+  <script src="/lib/require-2.1.11.min.js"></script>
+  <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
+</head>
+<body>
+  <!-- 哎呀 什么都没有 -->
+<script>
+require(['/src/config/require.config.js'], function () {
+  require(['/src/js/content_iframe.js', 'echarts/chart/bar', 'echarts/chart/pie'], function (Moo) {
+    var body = Moo.body,
+      bread = Moo.bread,
+      bodytitle = Moo.bodytitle,
+      panel = Moo.panel,
+      ec = Moo.ec;
+    // main body
+    var bod = body.create().appendTo($('.wping-body'));
+    bod.eq(1).css({
+      top: 0, 
+      left: 0,
+      bottom: 0
+    })
+    var main = bod.find('.wping-bodymain');
+    var content = bod.find('.wping-bodycontent');
+    
+    // bread
+    // bread.create(bod, [{title: '全媒体采编',}, {title: '已签发平台',}])
+
+    // search-from
+    // search.create(main)
+    bodytitle.create(content, { title: '首页栏目添加' })
+
+
+    // 首页栏目添加table
+    var panelParam = {
+      title: '<div class="main-table-title"></div>',
+      body: '<div class="main-table"><div></div></div>'
+    }
+    panel.create(content, panelParam, function (dom) {
+      var icon = dom.find('.layui-icon');
+      var tablebox = dom.find('.main-table');
+      var titlebox = dom.find('.main-table-title');
+      titlebox.prependTo(titlebox.parent());
+
+    })
+  })
+})
+</script>
+</body>
+</html>

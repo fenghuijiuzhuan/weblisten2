@@ -1,4 +1,4 @@
-define(['jquery'], function() {
+define(['jquery', 'layui', '/src/util/nowmodel.js', '/frame/echarts-2.2.7/dist/echarts.js'], function() {
   'use strict';
   !function(){
     var tpl = '<meta charset="UTF-8">'+
@@ -9,11 +9,18 @@ define(['jquery'], function() {
     '<link rel="stylesheet" href="/frame/layui/css/admin.css"  media="all">'+
     '<link rel="stylesheet" href="/src/static/font-awesome-4.7.0/css/font-awesome.min.css">'+
     '<link rel="stylesheet" href="/src/static/css/common/comm.css">'+
-    '<link rel="stylesheet" href="/src/static/css/index.css">'+
-    '<!-- <link rel="stylesheet" type="text/css" href="/src/static/font/iconfont.css"> -->'+
-    '<link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_912067_sdzsqkthgn8.css">'+
-    '<script type="text/javascript" charset="utf-8" src="/src/util/nowmodel.js"></script>';
+    // '<link rel="stylesheet" href="/src/static/css/index.css">'+
+    // '<!-- <link rel="stylesheet" type="text/css" href="/src/static/font/iconfont.css"> -->'+
+    // '<link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_912067_sdzsqkthgn8.css">'+
+    // '<script type="text/javascript" charset="utf-8" src="/frame/echarts-2.2.7/dist/echarts.js"></script>'+
+    // '<script type="text/javascript" charset="utf-8" src="/src/util/nowmodel.js"></script>'+
+    '';
+    // console.log()
+    if(location.pathname==='/'||(/(index)/g).test(location.pathname)){
+      tpl += '<link rel="stylesheet" href="/src/static/css/index.css">'
+    }
     // '<script type="text/javascript" charset="utf-8" src="/lib/jquery-1.11.1.min.js"></script>'
     $('head').prepend(tpl);
+    // $('<script type="text/javascript" charset="utf-8" src="/frame/echarts-2.2.7/dist/echarts.js"></script>').appendTo($('head'))
   }()
 });
