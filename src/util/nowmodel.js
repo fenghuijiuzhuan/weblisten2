@@ -8,6 +8,9 @@
     return nowModel
   }
   function add(name, mod) {
+    if(nowModel[name]){
+      delete nowModel[name]
+    }
     nowModel[name] = mod
   }
   function sub(name) {

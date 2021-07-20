@@ -5,7 +5,7 @@ define([], function() {
     var bod = '<div class="layui-body wping-body">'+ child +'</div>'
     var html = '<!-- main start -->'+bod+'<!-- main end -->';
     var dom = $(html)
-    NowMOD.add('body', dom)
+    //NowMOD.add('body', dom)
     return dom
   }
   return {

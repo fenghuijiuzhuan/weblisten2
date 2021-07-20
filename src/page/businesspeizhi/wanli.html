@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/src/static/css/common/base.css">
+  <link rel="stylesheet" href="/frame/layui/css/layui.css"  media="all">
+  <link rel="stylesheet" href="/frame/layui/css/admin.css"  media="all">
+  <link rel="stylesheet" href="/src/static/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/src/static/css/common/comm.css">
+  <script src="/lib/require-2.1.11.min.js"></script>
+  <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
+</head>
+<body>
+<script type="text/html" id="webInfoPoper">
+  <form class="layui-form" action="" lay-filter="changeWebInfo">
+    <input type="text" name="id" style="display: none;">
+    <div class="layui-form-item">
+      <label class="layui-form-label">站点名称</label>
+      <div class="layui-input-block">
+        <input type="text" name="siteName" disabled class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">修改规则</label>
+      <div class="layui-input-block">
+        {{ d.templete }}
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button class="layui-btn wping-form-cancel">取消</button>
+        <button class="layui-btn" lay-submit lay-filter="formChange">保存修改</button>
+      </div>
+    </div>
+  </form>
+</script>
+<div id="formViewPoper" style="display: none;"></div>
+<script>
+require(['/src/config/require.config.js'], function () {
+  require(['/src/js/content_iframe.js', 'echarts/chart/bar', 'echarts/chart/pie'], function (Moo) {
+    var body = Moo.body,
+      bread = Moo.bread,
+      bodytitle = Moo.bodytitle,
+      panel = Moo.panel,
+      ec = Moo.ec;
+    function isDataType(s){
+      var regu =/datatype/ig;
+      var re = new RegExp(regu);
+      if (re.test(s)) {
+        return true;
+      }else{
+        return false;
+      }
+    }
+    var bod = body.create().appendTo($('body'));
+    bod.eq(1).css({
+      top: 0, 
+      left: 0,
+      bottom: 0
+    })
+    var main = bod.find('.wping-bodymain');
+    var content = bod.find('.wping-bodycontent');
+    
+    // bread
+    // bread.create(bod, [{title: '全媒体采编',}, {title: '已签发平台',}])
+
+    // search-from
+    // search.create(main)
+    bodytitle.create(content, { title: '页面' })
+    
+
+    // 栏目更新配置table
+    var panelParam = {
+      body: '<div class="main-table"><table class="layui-hide" id="main-table" lay-filter="configcolm"></table></div>'
+    }
+    panel.create(content, panelParam, function (dom) {
+      var icon = dom.find('.layui-icon');
+      var tablebox = dom.find('.main-table');
+      var titlebox = dom.find('.main-table-title');
+      
+      titlebox.prependTo(titlebox.parent());
+      layui.use(['treeSelect','form', 'table', 'layer', 'laytpl'], function () {
+        var treeSelect= layui.treeSelect;
+        var table = layui.table;
+        var form = layui.form;
+        var layer = layui.layer;
+        var laytpl = layui.laytpl;
+        var changeWebInfoHtml = webInfoPoper.innerHTML,
+            formViewPoper = document.getElementById('formViewPoper');
+
+        table.render({
+          elem: '#main-table',
+          url: 'SiteMonitor/a/mon/monsite/lists',
+          page: true,
+          cols: [[
+            {field: 'column_type_id', title: 'key', width:"", hide: true},
+            {field: 'id', title: '序号', width:"5%"},
+            {title: '站点名称', width:"10%", templet: function(d){
+              return d.column_type_id
+            }},
+            {title: '监测规则', width:"", templet: function(d){
+              var tpl = d.templete;
+              return tpl.replace(/(\\$\\$(.)+?\\$\\$)/ig, function ($0, $1, $2) {
+                return d[$2]
+              })
+            }},
+            {title: '操作',width:"", templet: function(){
+              var tpl = '';
+              tpl += '<button lay-event="edit" class="layui-btn layui-btn-xs">修改</button>'
+              return tpl
+            }}
+          ]],
+        })
+        table.on('tool(configcolm)', function (obj) {
+          var data = obj.data,
+            layEvent = obj.event;
+          if (layEvent === 'edit') {
+            var templete = data.templete.replace(/(\$\$(.)+?\$\$)/ig, function ($0, $1, $2) {
+              if(isDataType){
+                return '<input type="text" name="'+ $2 +'" class="layui-input" value="'+data[$2]+'" />'
+              }else{
+                return '<input type="text" name="'+ $2 +'" class="layui-input" value="'+data[$2]+'" />'
+              }
+            })
+            laytpl(changeWebInfoHtml).render({templete: templete}, function(html){
+              formViewPoper.innerHTML = html;
+              form.render(null, 'changeWebInfo')
+            });
+            form.val("changeWebInfo", {
+              "siteName": data.siteName
+            })
+            layer.open({
+              type: 1,
+              title: '修改规则',
+              area: '700px',
+              content: $(formViewPoper),
+              success: function (layero, index) {
+                $(formViewPoper).find('.wping-form-cancel').on('click', function () {
+                  layer.close(index)
+                  return false;
+                });
+              },
+              end: function () {
+                $(formViewPoper).find('.wping-form-cancel').off('click')
+              }
+            })
+          }
+        })
+
+
+        form.on('submit(formChange)', function(data){
+          // var json = $.extend({}, data.field);
+          // json['isHomePage'] = json['isHomePage']?1:0;
+          // $.ajax({
+          //   type: 'post',
+          //   url: 'http://192.168.5.21:8080/SiteMonitor/a/mon/moncolumndetail/save',
+          //   data: json,
+          //   success: function(msg){
+          //     table.reload('main-table',{});
+          //     layer.closeAll();
+          //     layer.msg(msg.message);
+          //   }
+          // });
+          return false;
+        });
+      
+
+        
+      })
+    })
+
+  })
+})
+</script>
+</body>
+</html>

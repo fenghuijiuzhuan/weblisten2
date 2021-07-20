@@ -2,6 +2,14 @@
 <html lang="ch">
 <head>
   <title>配置监测选项</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/src/static/css/common/base.css">
+  <link rel="stylesheet" href="/frame/layui/css/layui.css"  media="all">
+  <link rel="stylesheet" href="/frame/layui/css/admin.css"  media="all">
+  <link rel="stylesheet" href="/src/static/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/src/static/css/common/comm.css">
   <script src="/lib/require-2.1.11.min.js"></script>
   <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
 </head>
@@ -15,8 +23,7 @@ require(['/src/config/require.config.js'], function () {
       bodytitle = Moo.bodytitle,
       panel = Moo.panel,
       ec = Moo.ec;
-    // main body
-    var bod = body.create().appendTo($('.wping-body'));
+    var bod = body.create().appendTo($('body'));
     bod.eq(1).css({
       top: 0, 
       left: 0,
@@ -36,84 +43,155 @@ require(['/src/config/require.config.js'], function () {
     // 栏目更新配置table
     var panelParam = {
       title: '<div class="text-right main-table-title"><button class="layui-btn layui-btn-normal layui-btn-sm addrow">添加栏目</button></div>',
-      body: '<div class="main-table"><div></div></div>'
+      body: '<div class="main-table"><table class="layui-hide" id="main-table" lay-filter="configcolm"></table></div>'
     }
     panel.create(content, panelParam, function (dom) {
       var icon = dom.find('.layui-icon');
       var tablebox = dom.find('.main-table');
       var titlebox = dom.find('.main-table-title');
       titlebox.prependTo(titlebox.parent());
-      layui.use('table', function () {
-        var table = layui.table;
-        table.render({
-          elem: tablebox,
-          url: '/testdata/zonghepingfen/xinxigengxinqingkuang/config_lanmugengxin.json',
-          page: true,
-          cols: [[
-            {field: 'id', title: '序号', width:"10%"},
-            {field: 'title', title: '栏目名称', width:"20%"},
-            {field: 'class', title: '栏目分类', width:"20%"},
-            {field: 'url', title: '栏目url地址', width:"30%"},
-            {field: 'controls', title: '操作',width:"", templet: function(d){
-              var tpl = '';
-              for(var i = 0; i < d.controls.length; i++){
-                var item = d.controls[i];
-                tpl += '<button class="layui-btn layui-btn-sm '+item.color+'">'+item.text+'</button>'
-              }
-              return tpl
-            }}
-          ]]
-        })
-      })
-
       require(['addcolumn'], function (addcolumn) {
-        addcolumn(null, {}, function (dom) {
-          layui.use('form', function(){
+        addcolumn.addcolumn({}, function (dom) {
+          layui.use(['treeSelect','form', 'table', 'layer'], function () {
+            var treeSelect= layui.treeSelect;
+            var table = layui.table;
             var form = layui.form;
+            var layer = layui.layer;
+            table.render({
+              elem: '#main-table',
+              url: '/testdata/zonghepingfen/xinxigengxinqingkuang/config_lanmugengxin.json',
+              page: true,
+              cols: [[
+                {field: 'id', title: '序号', width:"10%"},
+                {field: 'title', title: '栏目名称', width:"20%"},
+                {field: 'class', title: '栏目分类', width:"20%"},
+                {field: 'url', title: '栏目url地址', width:"30%"},
+                {title: '操作',width:"", templet: function(){
+                  var tpl = '';
+                  tpl += '<button lay-event="edit" class="layui-btn layui-btn-xs">修改</button>'
+                  tpl += '<button lay-event="del" class="layui-btn layui-btn-xs">删除</button>'
+                  
+                  return tpl
+                }}
+              ]],
+            })
+            table.on('tool(configcolm)', function (obj) {
+              var data = obj.data,
+                layEvent = obj.event;
+              if (layEvent === 'edit') {
+                addcolumn.addcolumn_mainform($('#addcolumnhidebox'), {code: data.id}, function () {
+                  // console.log(dom)
+                  dom.find('button[lay-filter=formDemo]').hide(0)
+                  dom.find('button[lay-filter=formChange]').show(0)
+                  layer.open({
+                    type: 1,
+                    area: '700px',
+                    content: dom,
+                    success: function (layero, index) {
+                      treeSelect.checkNode('treeselect', data.id);
+                      $('input[name=columnTypeId]').val(data.id)
+                      
+                      form.val("addColumn", {
+                        "title": data.title,
+                        "url": data.url,
+                        "id": data.id,
+                        "switch": true
+                      })
+                      dom.find('.wping-form-cancel').on('click', function () {
+                        layer.close(index)
+                        return false;
+                      });
+                    },
+                    end: function () {
+                      dom.find('.wping-form-cancel').off('click')
+                    }
+                  })
+                })
+              } else if(layEvent === 'del'){
+                layer.confirm('真的删除行么', function (index) {
+                  obj.del(obj); //删除对应行（tr）的DOM结构
+                  layer.close(index);
+                  //向服务端发送删除指令
+                  $.ajax({
+                    type: 'post',
+                    url: '',
+                    data: {},
+                    success: function (msg) {
+                      
+                    }
+                  })
+                });
+              }
+            })
+
+
             form.on('submit(formDemo)', function(data){
               // layer.msg(JSON.stringify(data.field));
-              form.reset('addColumn');
+              console.log(data)
+              // form.reset('addColumn');
               return false;
             });
-          });
+            form.on('submit(formChange)', function (data) {
+                      
+              return false;
+            })
           
-          titlebox.find('button.addrow').on('click', function (param) {
-            layui.use('layer', function(){
-              var layer = layui.layer;
+            titlebox.find('button.addrow').on('click', function (param) {
+              dom.find('button[lay-filter=formDemo]').show(0)
+              dom.find('button[lay-filter=formChange]').hide(0)
+              dom.find('form')[0].reset()
               layer.open({
                 type: 1,
-                area: ['600px'],
+                area: '700px',
                 content: dom,
                 success: function (layero, index) {
                   dom.find('.wping-form-cancel').on('click', function () {
                     layer.close(index)
                   });
-                  // dom.find('.wping-from-test').on('click', function () {
-                  //   layer.open({
-                  //     type: 1,
-                  //     title: '测试',
-                  //     area: ['600px', '260px'],
-                  //     shade: .1,
-                  //     maxmin: true,
-                  //     content: '//layer.layui.com/test/settop.html',
-                  //     btn: ['继续', '关闭'],
-                  //     yes: function(){
-                  //       $(that).click(); 
-                  //     },
-                  //     btn2: function(index){
-                  //       layer.close(index);
-                  //     },
-                  //     zIndex: layer.zIndex,
-                  //     success: function(layero){
-                  //       layer.setTop(layero); //重点2
-                  //     }
-                  //   });
-                  // })
                 },
                 end: function () {
-                  dom.find('.wping-from-test','.wping-form-cancel').off('click')
+                  dom.find('.wping-form-cancel').off('click')
                 }
               });
+            })
+
+          
+            treeSelect.render({
+                // 选择器
+                elem: '#treeselect',
+                // 数据
+                data: '/testdata/data3.json',
+                // 异步加载方式：get/post，默认get
+                type: 'get',
+                // 占位符
+                placeholder: '占位符',
+                // 是否开启搜索功能：true/false，默认false
+                search: true,
+                // 点击回调
+                click: function(d){
+                  if(d.current.check_Child_State >= 0){
+                    return true
+                  }
+                  $('input[name=columnTypeId]').val(d.current.id);
+                  $(treeselect).val(d.current.name)
+                  var hidebox = $('#addcolumnhidebox');
+                  addcolumn.addcolumn_mainform(hidebox, {code: d.current.id}, function (dom) {
+                    form.render(null, 'addColumn')
+                  })
+                },
+                // 加载完成后的回调函数
+                success: function (d) {
+                    console.log(d);
+    //                选中节点，根据id筛选
+                  //  treeSelect.checkNode('treeselect', 3);
+
+    //                获取zTree对象，可以调用zTree方法
+                  //  var treeObj = treeSelect.zTree('treeselect');
+                  //  console.log(treeObj);
+
+    //                刷新树结构
+                  //  treeSelect.refresh('treeselect');
+                }
             });
           })
 
@@ -121,8 +199,8 @@ require(['/src/config/require.config.js'], function () {
 
         
       })
-
     })
+
   })
 })
 </script>

@@ -10,7 +10,8 @@ define(['util/onloadpage'], function(loadpage) {
         resultNext(result);
         function resultNext(result){
           var dom = $(result).appendTo(ele);
-          NowMOD.add('menu', dom)
+          $('<style type="text/css">.layui-body{left: 200px!important}</style>').appendTo(dom)
+          window.menagger && NowMOD.add('menu', dom)
           layui.use('element', function(){
             var element = layui.element;
             element.render('nav')
@@ -20,12 +21,13 @@ define(['util/onloadpage'], function(loadpage) {
             })
           })
           var aArr = dom.find('a');
-          aArr.on('click', function () { return false });
           (function (e) {
             loadpage($(this).attr('href2'), ($(this).attr('addtree') === 'true'))
             $(this).parent('dd,li').addClass('layui-this');
             return false;
           }).call(dom.find('a.first:eq(0)'))
+          aArr.on('click', function () { return false });
+
           // dom.find('a.first:eq(0)').off('click').one('click', function (e) {
           //   loadpage($(this).attr('href2'), ($(this).attr('addtree') === 'true'))
           //   return false;
@@ -62,6 +64,17 @@ define(['util/onloadpage'], function(loadpage) {
             src: '/src/page/kaohepingfen/danxiangfoujue/hudonghuiying.html',
             children: []
           }
+        ]
+      },
+      {
+        text: '网站抽查',
+        src: 'javascript:;',
+        children: [
+          {
+            text: '站点访问',
+            src: '/src/page/kaohepingfen/wangzhantongji/wangzhanchoucha.html',
+            children: []
+          },
         ]
       },
       {

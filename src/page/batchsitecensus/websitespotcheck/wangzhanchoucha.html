@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <title>配置监测选项</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/src/static/css/common/base.css">
+  <link rel="stylesheet" href="/frame/layui/css/layui.css"  media="all">
+  <link rel="stylesheet" href="/frame/layui/css/admin.css"  media="all">
+  <link rel="stylesheet" href="/src/static/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/src/static/css/common/comm.css">
+  <script src="/lib/require-2.1.11.min.js"></script>
+  <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
+</head>
+<body>
+<body>
+  <!-- 哎呀 什么都没有 -->
+<script>
+require(['/src/config/require.config.js'], function () {
+  require(['/src/js/content_iframe.js', 'echarts/chart/bar', 'echarts/chart/pie'], function (Moo) {
+    var body = Moo.body,
+      bread = Moo.bread,
+      bodytitle = Moo.bodytitle,
+      panel = Moo.panel,
+      search = Moo.search,
+      ec = Moo.ec;
+    var bod = body.create().appendTo($('body'));
+    bod.eq(1).css({
+      top: 0, 
+      left: 0,
+      bottom: 0
+    })
+    var main = bod.find('.wping-bodymain');
+    var content = bod.find('.wping-bodycontent');
+    // bread.create(bod, [{title: '全媒体采编',}, {title: '已签发平台',}])
+    
+    bodytitle.create(main, {title: '网站抽查'})
+    
+    // tab 选项卡
+    var panelParam = {
+      body: '<div class="main-panel-tab layui-tab" lay-filter="link-tab-type">'+
+        '<ul class="layui-tab-title">'+
+          '<li class="layui-this">网站抽查</li>'+
+          '<li>下级抽查汇报</li>'+
+          '<li>下级整改反馈</li>'+
+        '</ul>'+
+        '<div class="layui-tab-content">'+
+          '<div class="layui-tab-item layui-show main-panel-tab-one"></div>'+
+          '<div class="layui-tab-item main-panel-tab-two"></div>'+
+          '<div class="layui-tab-item main-panel-tab-three"></div>'+
+        '</div>'+
+      '</div>'
+    }
+
+    panel.create(content, panelParam, function (dom) {
+      var box = dom.find(".main-panel-tab .layui-tab-content");
+      CreateChartsTable(0)
+      CreateChartsTable(1)
+      CreateChartsTable(2)
+      function CreateChartsTable(params) {
+        var swip = {
+          0: function(){
+            var div_1 = box.find(".main-panel-tab-one");
+            // search-from
+            var param = {
+                title: '<div style="color: #777">'+
+                '<span style="margin-right: 20px;">当前服务合同号：<span style="font-size:14px;">SO#20180711-0003</span></span>'+
+                '<span style="margin-right: 20px;">已抽查站次：<span style="font-size:15px;color: #EF3C3C;">931</span></span>'+
+                '<span style="margin-right: 20px;">可抽查总站次：<span style="font-size:15px;color: #EF3C3C;">3000</span></span>'+
+                '<span style="margin-right: 20px;">剩余可抽查站次：<span style="font-size:15px;color: #EF3C3C;">2069</span></span>'+
+              '</div>', 
+              search: {
+                name: '全局搜索：',
+                placeholder: '请输入任务名称'
+              },
+              select: [{
+                name: '创建时间',
+                content: [
+                  {text: '全部', value: '1'},
+                  {text: '近一个月批次', value: '2'},
+                  {text: '近三个月批次', value: '3'},
+                  {text: '近一年批次', value: '4'}
+                ]
+              }],
+              date: false,
+              check: false,
+              btn: [
+                {name: '查询', filter: 'search', def: 'lay-submit'},
+                {name: '抽查报告', filter: 'searcheck', def: 'lay-submit'},
+                {name: '新建任务', filter: 'new', def: 'lay-submit'}
+              ]
+            };
+            search.create(div_1, param, function (dom) {
+              layui.use(['table', 'form', 'laydate'], function(){
+                var form = layui.form;
+                var table = layui.table;
+                var laydate = layui.laydate;
+                form.render()
+                form.on('submit(search)', function (obj) {
+                  table.reload('main-table-one', {
+                    where: obj.field
+                  })
+                  return false;
+                })
+                form.on('submit(searcheck)', function (obj) {
+                  // console.log(obj)
+                  return false;
+                })
+                form.on('submit(new)', function (obj) {
+                  // console.log(obj)
+                  return false;
+                })
+              })
+            })
+            Moo.createChartTable({
+              panelTable: {
+                id: '#main-table-one'
+              },
+              content: div_1,
+              height: ''
+            })
+          },
+          1: function () {
+            var div_2 = box.find(".main-panel-tab-two");
+            // search-from
+            var param = {
+              search: {
+                name: '全局搜索：',
+                placeholder: '请输入任务名称'
+              },
+              select: false,
+              date: false,
+              check: false,
+              btn: [
+                {name: '查询', filter: 'search_1', def: 'lay-submit'}
+              ]
+            };
+            search.create(div_2, param, function (dom) {
+              layui.use(['table', 'form', 'laydate'], function(){
+                var form = layui.form;
+                var table = layui.table;
+                var laydate = layui.laydate;
+                form.on('submit(search_1)', function (obj) {
+                  table.reload('main-table-two', {
+                    where: obj.field
+                  })
+
+                  return false;
+                })
+              })
+            })
+            Moo.createChartTable({
+              panelTable: {
+                id: '#main-table-two'
+              },
+              content: div_2,
+              height: ''
+            })
+          },
+          2: function () {
+            var div_3 = box.find(".main-panel-tab-three");
+            // search-from
+            var param = {
+              search: {
+                name: '全局搜索：',
+                placeholder: '请输入任务名称'
+              },
+              select: [{
+                content: [
+                  {text: '网站类别', value: '0'},
+                  {text: '本级门户', value: '1'},
+                  {text: '本级部门', value: '2'},
+                  {text: '下属单位', value: '3'}
+                ]
+              }, {
+                content: [
+                  {text: '反馈状态', value: '1'},
+                  {text: '已读已反馈', value: '2'},
+                  {text: '未读未反馈', value: '3'},
+                  {text: '已读未反馈', value: '4'}
+                ]
+              }],
+              date: false,
+              check: false,
+              btn: [
+                {name: '查询', filter: 'search_2', def: 'lay-submit'}
+              ]
+            };
+            search.create(div_3, param, function (dom) {
+              layui.use(['table', 'form', 'laydate'], function(){
+                var form = layui.form;
+                var table = layui.table;
+                var laydate = layui.laydate;
+                form.on('submit(search_2)', function (obj) {
+                  table.reload('main-table-three', {
+                    where: obj.field
+                  })
+                  return false;
+                })
+              })
+            })
+            Moo.createChartTable({
+              panelTable: {
+                id: '#main-table-three'
+              },
+              content: div_3,
+              height: ''
+            })
+          }
+        }
+        swip[params]();
+      }
+      layui.use(['element', 'table'],function () {
+        var element = layui.element;
+        var table = layui.table;
+        element.on('tab(link-tab-type)', function(data){
+          var index = data.index;
+          var object = {
+            0: 'main-table-one',
+            1: 'main-table-two',
+            2: 'main-table-three',
+          }
+          table.reload(object[index])
+        });
+      })
+    })
+
+
+    // Moo.createChartTable({
+    //   title: '监测分析',
+    //   panelTable: {
+    //     id: '#main-table'
+    //   },
+    //   content: content
+    // })
+  });
+})
+
+// var money = 10000;
+// var day = 365;
+// var lv = 0.8244/10000;
+// for(var i = 0; i < day; i ++){
+//     var li = money * lv;
+//     li = Math.ceil(li* 100)/100;
+//     var count = money + li;
+//     money = count
+// }
+// console.log(money)
+
+
+</script>
+</body>
+</html>
+
+
+
+<!-- 
+Yongfei Guo
+Yujie Ren
+
+　　We are gathered here today in the sight of God, and in the face of this company, to join together Yongfei Guo and Yujie Ren in holy matrimony; which is an honorable estate, instituted of God, since the first man and the first woman walked on the earth. Therefore; it is not to be entered into unadvisedly or lightly, but reverently and soberly. Into this holy estate these two persons present come now to be joined. If any one can show just cause why they may not be lawfully joined together, let them speak now or forever hold their peace.
+
+　　I require and charge you both that if either of you know any impediment why you may not be lawfully joined together in matrimony, you confess it now. Be assured that if any persons are joined together otherwise than as God's word allows, their marriage is not lawful.
+
+　　Yongfei Guo Do you take Yujie Ren for your lawful wedded wife, to live together after God's ordinance, in the holy estate of matrimony? Will you love, honor, comfort, and cherish her from this day forward, forsaking all others, keeping only unto her for as long as you both shall live?
+
+　　Yujie Ren, do you take Yongfei Guo for your lawful wedded husband, to live together after God's ordinance, in the holy estate of matrimony? Will you love, honor, comfort, and cherish him from this day forward, forsaking all others, keeping only unto him for as long as you both shall live?
+
+　　I, Yongfei Guo take thee Yujie Ren to be my wedded wife, to have and to hold from this day forward, for better for worse, for richer for poorer, in sickness and in health, to love, honor, and cherish, 'til death do us part, according to God's holy ordinance; and there to I plight thee my troth.
+
+　　I, Yujie Ren take thee Yongfei Guo to be my wedded husband, to have and to hold from this day forward, for better for worse, for richer for poorer, in sickness and in health, to love, honor, and cherish, 'til death do us part, according to God's holy ordinance; and there to I plight thee my troth.
+
+　　Father, we pray for all married persons, that they may continue to give, be able to forgive, and experience more and more of the joy of the Lord with each passing day. And especially for Yongfei Guo and Yujie Ren, now beginning their married life together, that they may have pine assistance, the constant support of friends, and a long life with good health. May your fullest blessing come upon Yujie Ren and her husband Yongfei Guo, from this day forward, for ever and ever, Amen.
+
+　　May Jesus Christ, our Lord and Savior, always be at the center of the new lives you are now starting to build together, that you may know the ways of true love and kindness. May the Lord bless you both all the days of your lives and fill you with his joy. Amen. -->

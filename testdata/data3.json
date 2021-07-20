@@ -1,0 +1,61 @@
+[
+    {
+      "id": 1,
+      "name": "zzz",
+      "open": true,
+      "children": [
+        {
+          "id": 2,
+          "name": "统一交流平台",
+          "open": false,
+          "checked": true
+        },
+        {
+          "id": 3,
+          "name": "数据开放",
+          "open": false,
+          "checked": true
+
+        },
+        {
+          "id": 17,
+          "name": "服务功能",
+          "open": false,
+          "checked": true
+        }
+      ],
+      "checked": true
+    },
+    {
+      "id": 4,
+      "name": "评论",
+      "open": false,
+      "children": [
+        {
+          "id": 5,
+          "name": "智能问答",
+          "open": false,
+          "checked": false
+        },
+        {
+          "id": 6,
+          "name": "智能搜索",
+          "open": false,
+          "checked": false
+        },
+        {
+          "id": 7,
+          "name": "机构职能",
+          "open": false,
+          "checked": false
+        },
+        {
+          "id": 8,
+          "name": "在线访谈",
+          "open": false,
+          "checked": false
+        }
+      ],
+      "checked": false
+    }
+  ]

@@ -1,4 +1,4 @@
-define([], function() {
+define(['/src/router/index.js'], function(router) {
   function header(ele, data) {
     require(['text!tpl/header.js'], function (html) {
       data = $.extend({}, head_list, data)
@@ -10,17 +10,17 @@ define([], function() {
         nextTick(result);
         function nextTick(dom){
           var dom = $(dom).appendTo(ele)
-          NowMOD.add('header', dom)
+          window.menagger && NowMOD.add('header', dom)
           //注意：导航 依赖 element 模块，否则无法进行功能性操作
           layui.use('element', function(){
             var element = layui.element;
             element.on('nav(header-nav)', function (data) {
-              var hash = $(data[0]).attr('href').slice('1');
-              require(['router'], function (router) {
-                new router(hash)
-              })
+              var hash = $(data[0]).attr('href2').slice('1');
+              nowModel.router.chuand(hash)
+              return false;
             })
           });
+          $('<style type="text/css">.layui-body{top: 70px!important}.layui-side{top: 70px!important;}</style>').appendTo(dom)
 
           dom.find('.layui-nav .layui-nav-item a').on('click', function () { return false })
           
@@ -30,7 +30,7 @@ define([], function() {
   }
 
   var head_list = {
-    router: '',
+    router: 'index',
     list: [
       {
         text: '首页',
@@ -39,6 +39,10 @@ define([], function() {
       }, {
         text: '考核评分',
         src: 'kaohe',
+        children: []
+      }, {
+        text: '栏目配置',
+        src: 'peiz',
         children: []
       }, {
         text: '系统设置',

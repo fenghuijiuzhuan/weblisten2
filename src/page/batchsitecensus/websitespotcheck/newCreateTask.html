@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <title>配置监测选项</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/src/static/css/common/base.css">
+  <link rel="stylesheet" href="/frame/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="/frame/layui/css/admin.css" media="all">
+  <link rel="stylesheet" href="/src/static/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/src/static/css/common/comm.css">
+  <script src="/lib/require-2.1.11.min.js"></script>
+  <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
+</head>
+<body>
+<body>
+<script type="text/html" id="model_B">
+  <form class="layui-form" action="" lay-filter="newCreateTaskContent">
+    {{# if(d.index=='0'){ }}
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">地方：</label>
+        <div class="layui-input-inline">
+          <select name="city" disabled>
+            <option value="">请选择</option>
+            {{# layui.each(d.city, function(index, item){ }}
+            <option value="{{index}}">{{item.text}}</option>
+            {{# }) }}
+          </select>
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">部委：</label>
+        <div class="layui-input-inline">
+          <select name="jigou" disabled>
+            <option value="">请选择</option>
+            {{# layui.each(d.city, function(index, item){ }}
+            <option value="{{index}}">{{item.text}}</option>
+            {{# }) }}
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="layui-card">
+      <div class="layui-card-header">
+        <span class="">*说明：</span>
+        <span style="color: #49cbe1;"><i class="layui-icon layui-icon-rate-solid" style="position: static;margin: 0;"></i>  门户</span>
+        <span style="color: #b937b5;"><i class="layui-icon layui-icon-rate-solid" style="position: static;margin: 0;"></i>  例外网站</span>
+        <span style="color: #f55555;"><i class="layui-icon layui-icon-rate-solid" style="position: static;margin: 0;"></i>  关停网站</span>
+      </div>
+      <div class="layui-card-body layui-row">
+        <div id="websiteTree" lay-filter="eleDataTree" class="layui-col-sm6 layui-col-md4 layui-col-lg3" style="height: 300px;border: 1px solid #ccc;overflow: auto;"></div>
+        <div class="layui-col-md1 layui-col-lg1 layui-hide-xs layui-show-md-inline-block" style="height: 300px"></div>
+        <div class="layui-col-sm6 layui-col-md4 layui-col-lg3" style="height: 300px;border: 1px solid #ccc;overflow: hidden;">
+          <div style="height: 30px;line-height: 30px;border-bottom: 1px solid #ccc;font-size: 16px;color: #4ac444;padding-left: 10px">已选 <span id="websiteenternum">0</span> 个抽查网站</div>
+          <div id="websiteenter" lay-filter="eleDataTree2" style="width: 100%;height: 269px;overflow: auto;"></div>
+        </div>
+      </div>
+    </div>
+    {{# } else if(d.index=='1'){ }}
+      <div class="layui-form-item">
+        <label class="layui-form-label">站点级别：</label>
+        <div class="layui-input-block" style="max-width: 800px;">
+          <input type="checkbox" name="" title="市级" lay-skin="primary" checked>
+          <input type="checkbox" name="" title="县级" lay-skin="primary">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">门户类型：</label>
+        <div class="layui-input-block" style="max-width: 800px;">
+          <input type="checkbox" name="" title="门户" lay-skin="primary" checked>
+          <input type="checkbox" name="" title="非门户" lay-skin="primary">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">各单位抽取平均比例：</label>
+        <div class="layui-input-inline" style="width: 100px;">
+          <input type="text" name="" required  lay-verify="required|number" class="layui-input">
+        </div>
+        <div class="layui-form-mid">%，已抽取 <span>0</span>个</div>
+      </div>
+    {{# } if(d.index=='2'){ }}
+      <div id="tab3tablebox"></div>
+    {{# } }}
+    <div class="text-center" style="padding-bottom: 50px;">
+      <button class="layui-btn" lay-submit lay-filter="yes">确定</button>
+      <button class="layui-btn layui-btn-primary" lay-submit lay-filter="cancel">取消</button>
+    </div>
+  </form>
+</script>
+<script type="text/html" id="model_A">
+  <form class="layui-form" action="" lay-filter="newCreateTask">
+    <div class="layui-form-item">
+      <label class="layui-form-label">抽查批次：</label>
+      <div class="layui-form-mid">第</div>
+      <div class="layui-input-inline">
+        <select name="pici" lay-verify="required">
+          <option value="">请选择</option>
+          {{# layui.each(d.pici, function(index, item){ }}
+          <option value="{{index}}">{{item.text}}</option>
+          {{# }) }}
+        </select>
+      </div>
+      <div class="layui-form-mid">批，第 1 组</div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">任务名称：</label>
+      <div class="layui-input-block" style="max-width: 800px;">
+        <input type="text" name="title" required  lay-verify="required" placeholder="填写本次任务站点范围、站点级别、门户类型、抽查比例等信息" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">监测时间：</label>
+      <div class="layui-input-inline" >
+        <input type="text" name="date_min" id="dateStart" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-mid">至</div>
+      <div class="layui-input-inline" >
+        <input type="text" name="date_max" id="dateEnd" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </form>
+</script>
+<script>
+require(['/src/config/require.config.js'], function () {
+  require(['/src/js/content_iframe.js', 'echarts/chart/bar', 'echarts/chart/pie'], function (Moo) {
+    var body = Moo.body,
+      bread = Moo.bread,
+      bodytitle = Moo.bodytitle,
+      panel = Moo.panel,
+      search = Moo.search,
+      ec = Moo.ec;
+    var bod = body.create().appendTo($('body'));
+    bod.eq(1).css({
+      top: 0, 
+      left: 0,
+      bottom: 0
+    })
+    var main = bod.find('.wping-bodymain');
+    var content = bod.find('.wping-bodycontent');
+    
+    bodytitle.create(main, {title: '新建任务'})
+    
+    // tab 选项卡
+    var panelParam = {
+      body: '<div class="main-panel-tab layui-tab" lay-filter="link-tab-type">'+
+        '<ul class="layui-tab-title">'+
+          '<li class="layui-this">人工选择站点</li>'+
+          '<li>随机选择站点</li>'+
+          '<li>复制任务站点</li>'+
+        '</ul>'+
+        '<div class="tab-common-content" style="padding-top: 10px;"></div>'+
+        '<div class="layui-tab-content" style="padding: 0">'+
+          '<div class="layui-tab-item layui-show main-panel-tab-one"></div>'+
+          '<div class="layui-tab-item main-panel-tab-two"></div>'+
+          '<div class="layui-tab-item main-panel-tab-three"></div>'+
+        '</div>'+
+      '</div>'
+    }
+
+    panel.create(content, panelParam, function (dom) {
+      layui.use(['element', 'table', 'laytpl', 'form', 'laydate', 'eleTree'],function () {
+        var element = layui.element;
+        var table = layui.table;
+        var laytpl = layui.laytpl;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var eleTree = layui.eleTree;
+        var box = dom.find(".main-panel-tab .layui-tab-content");
+        var combox = dom.find('.tab-common-content');
+        var modelhtml_a = document.getElementById('model_A').innerHTML;
+        var modelhtml_b = document.getElementById('model_B').innerHTML;
+        var comdata = {
+          pici: [
+            {text: '1111'},
+            {text: '2222'},
+          ],
+        }
+        laytpl(modelhtml_a).render(comdata, function(html){
+          combox.append($(html));
+          laydate.render({
+            elem: '#dateStart' //指定元素
+          });
+          laydate.render({
+            elem: '#dateEnd' //指定元素
+          });
+          form.render()
+        })
+        CreateChartsTable(0)
+        CreateChartsTable(1)
+        CreateChartsTable(2)
+        function CreateChartsTable(params) {
+          var swip = {
+            0: function(){
+              var div_1 = box.find(".main-panel-tab-one");
+              var tabdata = {
+                index: 0,
+                city: [],
+                jigou: []
+              }
+              var enter_tree_data = [];
+              laytpl(modelhtml_b).render(tabdata, function(html){
+                div_1.html(html)
+                var websiteTree = div_1.find('#websiteTree');
+                var websiteenter = div_1.find('#websiteenter');
+                form.render()
+                form.val({city: '', jigou: ''})
+                var eletree1 = eleTree.render({
+                  elem: '#websiteTree',
+                  url: '/testdata/tree.json',
+                  highlightCurrent: true,
+                  defaultExpandAll: true,
+                })
+                var eletree2 = eleTree.render({
+                  elem: '#websiteenter',
+                  data: enter_tree_data
+                })
+                eleTree.on("nodeClick(eleDataTree)",function(d) {
+                  if(!d.data.currentData.children){
+                    var currentData = d.data.currentData;
+                    for(var i = 0, _i = enter_tree_data.length; i<_i; i++ ){
+                      if(currentData.id == enter_tree_data[i].id){
+                        return;
+                      }
+                    }
+                    enter_tree_data.push(d.data.currentData);
+                    eletree2 = eleTree.render({
+                      elem: '#websiteenter',
+                      data: enter_tree_data
+                    })
+                    $('#websiteenternum').html(enter_tree_data.length)
+                  }
+                })
+                eleTree.on("nodeClick(eleDataTree2)",function(d) {
+                  var currentData = d.data.currentData;
+                  if(!currentData){return}
+                  for(var i = 0,_i=enter_tree_data.length;i<_i;i++){
+                    if(enter_tree_data[i]){
+                      if(currentData.id == enter_tree_data[i].id){ 
+                        enter_tree_data.splice(i, 1);
+                        _i=enter_tree_data.length;
+                      }
+                    }
+                  }
+                  eletree2 = eleTree.render({
+                    elem: '#websiteenter',
+                    data: enter_tree_data
+                  })
+                  $('#websiteenternum').html(enter_tree_data.length)
+                })
+                form.on('submit(yes)', function (data) {
+                  console.log(data)
+                  return false;
+                })
+                form.on('submit(cancel)', function (data) {
+                  console.log(data)
+                  return false;
+                })
+                
+              })
+              
+            },
+            1: function () {
+              var div_2 = box.find(".main-panel-tab-two");
+              var tabdata = {
+                index: 1,
+                city: [],
+                jigou: []
+              }
+              laytpl(modelhtml_b).render(tabdata, function(html){
+                div_2.html(html)
+                form.render()
+              })
+            },
+            2: function () {
+              var div_3 = box.find(".main-panel-tab-three");
+              var tabdata = {
+                index: 2,
+                city: [],
+                jigou: []
+              }
+              laytpl(modelhtml_b).render(tabdata, function(html){
+                div_3.html(html)
+                tab3tablebox = div_3.find('#tab3tablebox');
+                Moo.createChartTable({
+                  content: tab3tablebox,
+                  panelTable: {
+                    id: '#main-table'
+                  },
+                  url: '/',
+                  data: {},
+                  cols: [[
+                    {feild: 'pici', title:'批次', width: '5%'},
+                    {feild: 'zuci', title:'组次', width: '5%'},
+                    {feild: 'name', title:'任务名称', width: '20%'},
+                    {feild: 'zhouqi', title:'任务周期', width: ''},
+                    {feild: 'zhandianshu', title:'站点数（个）', width: '5%'},
+                    {feild: 'status', title:'任务状态', width: '10%'},
+                    {title:'操作', width: '', templet: function (d) {
+                      return '<button class="layui-btn layui-btn-xs"></button>'
+                    }},
+                  ]]
+                })
+                form.render()
+              })
+            }
+          }
+          swip[params]();
+        }
+      
+        element.on('tab(link-tab-type)', function(data){
+          var index = data.index;
+          var object = {
+            0: 'main-table-one',
+            1: 'main-table-two',
+            2: 'main-table-three',
+          }
+          //table.reload(object[index])
+        });
+      })
+    })
+
+
+
+
+
+
+
+
+
+
+  });
+})
+
+</script>
+</body>
+</html>

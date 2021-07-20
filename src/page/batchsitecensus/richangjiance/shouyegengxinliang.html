@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <title>配置监测选项</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/src/static/css/common/base.css">
+  <link rel="stylesheet" href="/frame/layui/css/layui.css"  media="all">
+  <link rel="stylesheet" href="/frame/layui/css/admin.css"  media="all">
+  <link rel="stylesheet" href="/src/static/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/src/static/css/common/comm.css">
+  <script src="/lib/require-2.1.11.min.js"></script>
+  <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
+</head>
+<body>
+<body>
+  <!-- 哎呀 什么都没有 -->
+<script>
+require(['/src/config/require.config.js'], function () {
+  require(['/src/js/content_iframe.js', 'util/compareDate'], function (Moo) {
+    var body = Moo.body,
+      bread = Moo.bread,
+      bodytitle = Moo.bodytitle,
+      panel = Moo.panel,
+      search = Moo.search,
+      ec = Moo.ec;
+    var bod = body.create().appendTo($('body'));
+    bod.eq(1).css({
+      top: 0,
+      left: 0,
+      bottom: 0
+    })
+    var main = bod.find('.wping-bodymain');
+    var content = bod.find('.wping-bodycontent');
+    // bread.create(bod, [{title: '全媒体采编',}, {title: '已签发平台',}])
+    
+    bodytitle.create(main, {title: '网站抽查'})
+    
+    // tab 选项卡
+    var panelParam = {
+      title: '<div id="main-search"></div>',
+      body: '<div><table id="main-table"></table></div>'
+    }
+
+    panel.create(content, panelParam, function (dom) {
+      var searchbox = dom.find("#main-search");
+      var tablebox = dom.find("#main-table");
+      // search-form
+      var param = {
+        search: {
+          // name: '',
+          placeholder: '输入网站名称和标识码'
+        },
+        select: [{
+          formName: 'siteType',
+          content: [
+            {text: '网站类别', value: ''},
+            {text: '省', value: '1'},
+            {text: '市', value: '2'},
+            {text: '县', value: '3'},
+            {text: '门户', value: '5'},
+            {text: '省直', value: '6'},
+          ]
+        }],
+        date: {
+          isArea: true,
+          dateStart: {name: '监测时间：', placeholder: 'yyyy-MM-dd', id: 'findDateStart'},
+          dateEnd: {name: '至', placeholder: 'yyyy-MM-dd', id: 'findDateEnd'}
+        },
+        check: {name: '超过两周未更新', status: true},
+        result: true,
+        btn: [
+          {name: '查询', filter: 'search', def: 'lay-submit'},
+          {name: '导出报告', filter: 'searcheck', def: 'lay-submit'}
+        ]
+      };
+      search.create(searchbox, param, function (dom) {
+        layui.use(['table', 'form', 'laydate'], function(){
+          var form = layui.form;
+          var table = layui.table;
+          var laydate = layui.laydate;
+          laydate.render({
+            elem: '#findDateStart',
+            done: function(value, date, endDate){
+              console.log(value); //得到日期生成的值，如：2017-08-18
+              console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+              console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+            }
+          });
+          laydate.render({
+            elem: '#findDateEnd',
+            done: function(value, date, endDate){
+              console.log(value); //得到日期生成的值，如：2017-08-18
+              console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+              console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+            }
+          });
+          form.render()
+          form.on('submit(search)', function (obj) {
+            dom.find('#searchresult').html('查询结果：0条')
+            table.reload('main-table', {
+              where: obj.field
+            })
+            return false;
+          })
+          form.on('submit(searcheck)', function (obj) {
+            // console.log(obj)
+            return false;
+          })
+        })
+      })
+      Moo.createChartTable({
+        panelTable: {
+          id: '#main-table'
+        },
+        content: tablebox,
+        height: '',
+        url: '/testdata/danxiangfoujue/shouyegengxin.json',
+        // api: 'list',
+        cols: [[
+          {field: 'siteName', title: '网站名称',width:""},
+          {field: 'homePageUrl', title: '首页地址', width:"",},
+          {field: 'isDoor', title: '确定不连通次数',width:"", sort: true},
+          {field: 'types', title: '不连通率',width:""},
+          {field: 'straightProvince', title: '连通次数',width:""},
+          {field: 'isNorm', title: '连通率',width:""},
+          {field: 'describes', title: '连接总次数',width:""},
+        ]],
+        parseData: function(res){
+          return {
+            "code": 0,
+            "count": res.count,
+            "data": res.list
+          };
+        },
+        request: {
+          "pageName": 'pageNo',
+          "limitName": 'pageSize'
+        },
+      })
+    })
+
+
+  });
+})
+
+</script>
+</body>
+</html>

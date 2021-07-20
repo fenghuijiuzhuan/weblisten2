@@ -6,12 +6,12 @@
       河南省政府网站统一技术平台
     </div>
   </a>
-  <ul class="layui-nav pull-left" lay-filter="header-nav">
+  <ul class="layui-nav pull-left wping-nav-left" lay-filter="header-nav">
     {{# layui.each(d.list, function (index, item) {  }}
-      <li class="layui-nav-item {{ d.router == item.src ? 'layui-this' : '' }}"><a href="#{{ item.src }}">{{ item.text }}</a></li>
+      <li class="layui-nav-item {{ d.router == item.src ? 'layui-this' : '' }}"><a href="javascript:;" href2="#{{ item.src }}">{{ item.text }}</a></li>
     {{# }) }}
   </ul>
-  <ul class="layui-nav pull-right">
+  <ul class="layui-nav pull-right wping-nav-right">
     <li class="layui-nav-item">
       <a href="javascript:;"><img src="http://iconfont.alicdn.com/t/1492824790092.jpg@100h_100w.jpg" class="layui-nav-img">我</a>
       <dl class="layui-nav-child">

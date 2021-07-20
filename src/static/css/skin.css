@@ -1,0 +1,7 @@
+a{color: #094AA1;}
+a:hover, a:focus{color: #1e9fff;}
+.navbar-inner{background: #094AA1;border: none;}
+.navbar .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus{color: #094AA1;background-color: #fff;}
+.navbar .nav>li>a:focus, .navbar .nav>li>a:hover{color: #094AA1; background-color: #fff;}
+.nav-list>.active>a, .nav-list>.active>a:hover, .nav-list>.active>a:focus{background-color: #094AA1;}
+#userControl>li>a:hover{background-color: #fff;}

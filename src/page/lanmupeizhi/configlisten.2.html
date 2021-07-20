@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <title>配置监测选项</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/src/static/css/common/base.css">
+  <link rel="stylesheet" href="/frame/layui/css/layui.css"  media="all">
+  <link rel="stylesheet" href="/frame/layui/css/admin.css"  media="all">
+  <link rel="stylesheet" href="/src/static/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/src/static/css/common/comm.css">
+  <script src="/lib/require-2.1.11.min.js"></script>
+  <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
+</head>
+<body>
+  <!-- 哎呀 什么都没有 -->
+<script>
+require(['/src/config/require.config.js'], function () {
+  require(['/src/js/content_iframe.js', 'echarts/chart/bar', 'echarts/chart/pie'], function (Moo) {
+    var body = Moo.body,
+      bread = Moo.bread,
+      bodytitle = Moo.bodytitle,
+      panel = Moo.panel,
+      ec = Moo.ec;
+    // main body
+    var bod = body.create().appendTo($('body'));
+    bod.eq(1).css({
+      top: 0,
+      left: 0,
+      bottom: 0
+    })
+    var main = bod.find('.wping-bodymain');
+    var content = bod.find('.wping-bodycontent');
+    
+    // bread
+    // bread.create(bod, [{title: '全媒体采编',}, {title: '已签发平台',}])
+
+    // search-from
+    // search.create(main)
+    bodytitle.create(content, { title: '栏目更新配置' })
+
+
+    // 栏目更新配置table
+    var panelParam = {
+      title: '<div class="text-right main-table-title" style="padding: 6px 0;"><button class="layui-btn layui-btn-normal layui-btn-sm addrow">添加栏目</button></div>',
+      body: '<div class="main-table"><table class="layui-hide" id="main-table" lay-filter="configcolm"></table></div>'
+    };
+    panel.create(content, panelParam, function (dom) {
+      var icon = dom.find('.layui-icon');
+      var tablebox = dom.find('.main-table');
+      var titlebox = dom.find('.main-table-title');
+      titlebox.prependTo(titlebox.parent());
+      require(['addcolumn'], function (addcolumn) {
+        addcolumn(null, {}, function (dom) {
+          layui.extend({
+            treeSelect: '/frame/layui/treeSelect/treeSelect'
+          }).use(['treeSelect','form', 'table', 'layer'], function () {
+            var treeSelect= layui.treeSelect;
+            var form = layui.form;
+            var table = layui.table;
+            var layer = layui.layer;
+            table.render({
+              elem: '#main-table',
+              url: '/testdata/zonghepingfen/xinxigengxinqingkuang/config_lanmugengxin.json',
+              method: 'post',
+              page: true,
+              cols: [[
+                {field: 'id', title: '栏目ID', width:"5%", hide: true}, 
+                {field: 'monColumnType', title: '栏目类别ID', width:"5%", hide: true, templet: function(d){return d.monColumnType.id;}},
+                {title: '序号', type: 'numbers', sort: true, width:"5%"},
+                {field: 'columnName', align:'center',title: '栏目名称', width:"12%"},
+                {title: '归属栏目类别', width:"20%", templet: function(d){
+                  return d.monColumnType.columnTypeName;
+                }},
+                {title: '栏目地址', width:"", templet: function(d){
+                  return "<a href='"+d.columnLink+"' target='_blank'>"+d.columnLink+"</a>";
+                }},
+                {title: '操作',width:"15%", templet: function(d){
+                  var tpl = '';
+                    tpl += '<button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">修改</button>';
+                    tpl += '<button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del">删除</button>';
+                  return tpl;
+                }}
+              ]],
+              parseData: function(res){
+                return {
+                  "code": 0,
+                  "count": res.count,
+                  "data": res.list
+                };
+              },
+              request: {
+                "pageName": 'pageNo',
+                "limitName": 'pageSize'
+              }
+            });
+            console.log(dom)
+            table.on('tool(configcolm)', function (obj) {
+              var data = obj.data,
+                layEvent = obj.event;
+              if (layEvent === 'edit') {
+                dom.find('button[lay-filter=formDemo]').hide(0);
+                dom.find('button[lay-filter=formChange]').show(0);
+                console.log(data)
+                layer.open({
+                  type: 1,
+                  area: ['600px'],
+                  content: dom,
+                  success: function (layero, index) {
+                    treeSelect.checkNode('treeselect', data.monColumnType.id);
+                    $(input[name=columnTypeId]).val(data.monColumnType.id)
+                    form.val("addColumn", {
+                      "columnName": data.columnName,
+                      "columnLink": data.columnLink,
+                      "prevColumnId": data.id,
+                      "isHomePage": data.isHomePage,
+                    })
+                    dom.find('.wping-form-cancel').on('click', function () {
+                      layer.close(index)
+                      return false
+                    });
+                  },
+                  end: function () {
+                    dom.find('.wping-form-cancel').off('click')
+                  }
+                })
+              } else if(layEvent === 'del'){
+                layer.confirm('真的删除行么', function (index) {
+                  obj.del(obj); //删除对应行（tr）的DOM结构
+                  layer.close(index);
+                  //向服务端发送删除指令
+                  $.ajax({
+                    type: 'post',
+                    url: '',
+                    data: {},
+                    success: function (msg) {
+                      
+                    }
+                  })
+                });
+              }
+            })
+
+
+            form.on('submit(formDemo)', function(data){
+              var json = $.extend({}, data.field);
+              json['isHomePage'] = json['isHomePage']?1:0;
+              $.ajax({
+                type: 'post',
+                url: 'http://192.168.5.21:8080/SiteMonitor/a/mon/moncolumndetail/save',
+                data: json,
+                success: function(msg){
+                  table.reload('main-table',{});
+                  layer.closeAll();
+                  layer.msg(msg.message);
+                }
+              });
+              return false;
+            });
+            form.on('submit(formChange)', function (data) {
+              var json = $.extend({}, data.field);
+              json['isHomePage'] = json['isHomePage']?1:0;
+              console.log(json);
+              $.ajax({
+                type: 'post',
+                url: 'http://192.168.5.21:8080/SiteMonitor/a/mon/moncolumndetail/update',
+                data: json,
+                success: function(msg){
+                  layer.closeAll();
+                  layer.msg(msg.message);
+                  table.reload('main-table',{});
+                }
+              });
+              return false;    
+            })
+          
+            titlebox.find('button.addrow').on('click', function (param) {
+              dom.find('button[lay-filter=formDemo]').show(0)
+              dom.find('button[lay-filter=formChange]').hide(0)
+              dom.find('form')[0].reset()
+              layer.open({
+                type: 1,
+                area: ['600px'],
+                content: dom,
+                success: function (layero, index) {
+                  dom.find('.wping-form-cancel').on('click', function () {
+                    layer.close(index);
+                  });
+                },
+                end: function () {
+                  dom.find('.wping-form-cancel').off('click')
+                }
+              });
+            });
+          
+            // treeSelect
+            treeSelect.render({
+              elem: '#treeselect',
+              data: 'http://192.168.5.21:8080/SiteMonitor/a/mon/moncolumntype/MonColumnTypeTree',
+              type: 'get',
+              placeholder: '占位符',
+              search: true,
+              click: function(d, ele){
+                if(d.current.check_Child_State >= 0){
+                  return true
+                }
+                $('input[name=columnTypeId]').val(d.current.id);
+              },
+              success: function (d) {
+
+              }
+            });
+          })
+
+        })
+
+        
+      })
+
+    })
+  })
+})
+
+
+
+
+/*  url: 'http://192.168.5.21:8080/SiteMonitor/a/mon/moncolumnupdate/list', //数据接口
+          method: 'post',
+          where: {
+          	'homepageid':'1'
+          },
+          page: true, //开启分页
+          autoSort: true,
+          cols: [[ //表头
+            {field: 'id', title: '序号', type: 'numbers', sort: true, width:"5%"}, 
+            {title: '更新时间', width:"20%", sort: true, templet: function(d){
+            	/* var time = new Date(d.columnUpdateTime);
+            	return time.format("yyyy年MM月dd日"); 
+            	return d.columnUpdateTime
+            }},
+            {title: '所属栏目', width:"10%", templet: function(d){
+            	return d.monColumnDetail.columnName
+            }},
+            {title: '标题', width:"", templet: function(d){
+            	return "<a href='"+d.columnLink+"' target='_blank'>"+d.columnTitle+"</a>"
+            }}
+          ]],
+          parseData: function(res){
+          	return {
+          		"code": 0,
+          		"count": res.count,
+          		"data": res.list
+          	}
+          },
+          request: {
+          	"pageName": 'pageNo',
+          	"limitName": 'pageSize'
+          },
+          done: function(){
+          	//table.on("sort()")
+          } */
+
+</script>
+
+
+
+
+</body>
+</html>

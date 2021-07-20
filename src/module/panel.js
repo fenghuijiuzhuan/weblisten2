@@ -16,7 +16,6 @@ define(['util/panelpackage'], function(tmp) {
           callback&&callback(dom)
         });
       })
-
     })
   }
 

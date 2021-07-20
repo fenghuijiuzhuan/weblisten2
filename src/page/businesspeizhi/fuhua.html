@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <title>配置监测选项</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/src/static/css/common/base.css">
+  <link rel="stylesheet" href="/frame/layui/css/layui.css"  media="all">
+  <link rel="stylesheet" href="/frame/layui/css/admin.css"  media="all">
+  <link rel="stylesheet" href="/src/static/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/src/static/css/common/comm.css">
+  <script src="/lib/require-2.1.11.min.js"></script>
+  <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
+</head>
+<body>
+  <!-- 哎呀 什么都没有 -->
+<script type="text/html" id="webInfoPoper">
+  <form class="layui-form" action="" lay-filter="changeWebInfo">
+    <input type="text" name="id" style="display: none;width:0;height:0;">
+    <div class="layui-form-item">
+      <label class="layui-form-label">站点名称</label>
+      <div class="layui-input-block">
+        <input type="text" name="siteName" required placeholder="请输入站点名称" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">站点域名</label>
+      <div class="layui-input-block">
+        <input type="text" name="siteHost" required placeholder="请输入站点域名" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">首页链接</label>
+      <div class="layui-input-block">
+        <input type="text" name="homePageUrl" required placeholder="请输入首页链接" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">是否是门户</label>
+      <div class="layui-input-block">
+        <input type="radio" name="isDoor" value="是" title="是">
+        <input type="radio" name="isDoor" value="否" title="否" checked>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">网站级别</label>
+      <div class="layui-input-block">
+        <input type="radio" name="types" value="省" title="省" checked>
+        <input type="radio" name="types" value="市" title="市">
+        <input type="radio" name="types" value="县" title="县">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button class="layui-btn wping-form-cancel">取消</button>
+        <button class="layui-btn" lay-submit lay-filter="formChangeSave">保存修改</button>
+      </div>
+    </div>
+  </form>
+</script>
+<div id="formViewPoper" style="display: none;padding: 20px 40px;"></div>
+<script>
+require(['/src/config/require.config.js'], function () {
+  require(['/src/js/content_iframe.js', 'echarts/chart/bar', 'echarts/chart/pie'], function (Moo) {
+    var body = Moo.body,
+      bread = Moo.bread,
+      bodytitle = Moo.bodytitle,
+      panel = Moo.panel,
+      ec = Moo.ec;
+    var bod = body.create().appendTo($('body'));
+    bod.eq(1).css({
+      top: 0, 
+      left: 0,
+      bottom: 0
+    })
+    var main = bod.find('.wping-bodymain');
+    var content = bod.find('.wping-bodycontent');
+    
+    // bread
+    // bread.create(bod, [{title: '全媒体采编',}, {title: '已签发平台',}])
+
+    // search-from
+    // search.create(main)
+    bodytitle.create(content, { title: '页面' })
+
+
+    // 栏目更新配置table
+    var panelParam = {
+      body: '<div class="main-table"><table class="layui-hide" id="main-table" lay-filter="configcolm"></table></div>'
+    }
+    panel.create(content, panelParam, function (dom) {
+      var icon = dom.find('.layui-icon');
+      var tablebox = dom.find('.main-table');
+      var titlebox = dom.find('.main-table-title');
+      
+      titlebox.prependTo(titlebox.parent());
+      layui.use(['form', 'table', 'layer', 'laytpl'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        var layer = layui.layer;
+        var laytpl = layui.laytpl;
+        var changeWebInfoHtml = webInfoPoper.innerHTML,
+            formViewPoper = document.getElementById('formViewPoper');
+        laytpl(changeWebInfoHtml).render({}, function(html){
+          formViewPoper.innerHTML = html;
+        });
+        table.render({
+          elem: '#main-table',
+          url: '/testdata/zonghepingfen/xinxigengxinqingkuang/config_lanmugengxin.json',
+          page: true,
+          cols: [[
+            {field: 'id', title: '序号', width:"8%"},
+            {field: 'siteName', title: '站点名称', width:"10%"},
+            {field: 'types', title: '网站级别', width:"10%"},
+            {field: 'siteHost', title: '站点域名', width:"26%"},
+            {field: 'homePageUrl', title: '首页链接', width:"26%"},
+            {field: 'isDoor', title: '是否是', width:"10%"},
+            {title: '操作',width:"", templet: function(){
+              var tpl = '';
+              tpl += '<button lay-event="edit" class="layui-btn layui-btn-xs">修改</button>'
+              
+              return tpl
+            }}
+          ]],
+        })
+        table.on('tool(configcolm)', function (obj) {
+          var data = obj.data,
+            layEvent = obj.event;
+          if (layEvent === 'edit') {
+            console.log(data)
+            form.val("changeWebInfo", {
+              "id": data.id,
+              "siteName": data.siteName,
+              "siteHost": data.siteHost,
+              "homePageUrl": data.homePageUrl,
+              "isDoor": data.isDoor,
+              "types": data.types
+            })
+            layer.open({
+              type: 1,
+              title: '修改网站信息',
+              area: '700px',
+              content: $(formViewPoper),
+              success: function (layero, index) {
+                form.render(null, 'changeWebInfo')
+                $(formViewPoper).find('.wping-form-cancel').on('click', function () {
+                  layer.close(index)
+                  return false
+                });
+              },
+              end: function () {
+                $(formViewPoper).find('.wping-form-cancel').off('click')
+              }
+            })
+          }
+        })
+
+
+        form.on('submit(formChangeSave)', function(data){
+          // layer.msg(JSON.stringify(data.field));
+          console.log(data)
+          // var json = $.extend({}, data.field);
+          // json['isHomePage'] = json['isHomePage']?1:0;
+          // $.ajax({
+          //   type: 'post',
+          //   url: 'http://192.168.5.21:8080/SiteMonitor/a/mon/moncolumndetail/save',
+          //   data: json,
+          //   success: function(msg){
+          //     table.reload('main-table',{});
+          //     layer.closeAll();
+          //     layer.msg(msg.message);
+          //   }
+          // });
+          // form.reset('addColumn');
+          return false;
+        });
+      
+
+        
+      })
+    })
+
+  })
+})
+</script>
+</body>
+</html>

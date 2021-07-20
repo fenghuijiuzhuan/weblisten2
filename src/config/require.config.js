@@ -7,16 +7,5 @@ require.config({
     "text":"/lib/text",
     "tpl": '/src/template/',
     "util": '/src/util',
-    "router": '/src/router/index',
-    // "modstatus": ''
-  },
-  shim: {
-    'header': {
-      deps: ['jquery', 'layui'],
-      exports: 'header'
-    },
-    'iframe': {
-      deps: ['jquery', 'layui']
-    }
   }
 });

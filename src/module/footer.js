@@ -13,7 +13,8 @@ define([], function() {
         var tpl = laytpl(html);
         tpl.render(data, function(result){
           var dom = $(result).appendTo(ele)
-          NowMOD.add('footer', dom)
+          window.menagger && NowMOD.add('footer', dom)
+          $('<style type="text/css">.layui-body{bottom: 60px!important;}.layui-side{bottom: 60px!important;}</style>').appendTo(dom)
     });
       })
     })

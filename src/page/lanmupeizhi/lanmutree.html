@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <title>配置监测选项</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/src/static/css/common/base.css">
+  <link rel="stylesheet" href="/frame/layui/css/layui.css"  media="all">
+  <link rel="stylesheet" href="/frame/layui/css/admin.css"  media="all">
+  <link rel="stylesheet" href="/src/static/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/src/static/css/common/comm.css">
+  <script src="/lib/require-2.1.11.min.js"></script>
+  <script src="/frame/echarts-2.2.7/dist/echarts.js"></script>
+</head>
+<body>
+</body>
+
+<script>
+require(['/src/config/require.config.js'], function () {
+  require(['/src/js/content_iframe.js', 'echarts/chart/bar', 'echarts/chart/pie'], function (Moo) {
+    var body = Moo.body,
+      bread = Moo.bread,
+      bodytitle = Moo.bodytitle,
+      panel = Moo.panel,
+      ec = Moo.ec;
+    function del(row) {
+        alert(row.id)
+    }
+
+    var layout = [
+        { name: '菜单名称', treeNodes: true, headerClass: 'value_col', colClass: 'value_col', style: '' },
+        {
+            name: '操作',
+            headerClass: 'value_col',
+            colClass: 'value_col',
+            style: 'width: 20%',
+            render: function(row) {
+                return "<a class='layui-btn layui-btn-danger layui-btn-sm' onclick='del(" + row + ")'><i class='layui-icon'>&#xe640;</i> 删除</a>"; //列渲染
+            }
+        },
+    ];
+    var bod = body.create().appendTo($('body'));
+    bod.eq(1).css({
+      top: 0, 
+      left: 0,
+      bottom: 0
+    })
+    var main = bod.find('.wping-bodymain');
+    var content = bod.find('.wping-bodycontent');
+    bodytitle.create(content, { title: '栏目配置' })
+    var panelParam = {
+      title: '<div class="text-right main-table-title"><button class="layui-btn layui-btn-normal layui-btn-sm addrow">添加栏目</button></div>',
+      body: '<div class="main-table" id="demo"></div>'
+    }
+    panel.create(content, panelParam, function (dom) {
+      layui.use(['form', 'treetable', 'layer'], function() {
+          var layer = layui.layer, form = layui.form, $ = layui.jquery;
+
+          var tree1 = layui.treetable({
+              elem: '#demo', //传入元素选择器
+              checkbox: true,
+              nodes: [
+                {
+                "id": "1",
+                "isNewRecord": false,
+                "parentId": "0",
+                "code": "xxgk",
+                "children": [{
+                  "id": "2",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "xxgknb",
+                  "name": "信息公开年报"
+                }, {
+                  "id": "3",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "xxgkzn",
+                  "name": "信息公开指南"
+                }, {
+                  "id": "4",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "sjfb",
+                  "name": "数据发布"
+                }, {
+                  "id": "5",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "yw",
+                  "name": "要闻"
+                }, {
+                  "id": "6",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "gzdt",
+                  "name": "工作动态"
+                }, {
+                  "id": "7",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "zfwj",
+                  "name": "政府文件（政策）"
+                }, {
+                  "id": "8",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "xxgkml",
+                  "name": "信息公开目录"
+                }, {
+                  "id": "9",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "ldxx",
+                  "name": "领导信息"
+                }, {
+                  "id": "10",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "jgzn",
+                  "name": "机构职能"
+                }, {
+                  "id": "11",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "gkxx",
+                  "name": "概况信息"
+                }, {
+                  "id": "12",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "zcjd",
+                  "name": "政策解读"
+                }, {
+                  "id": "13",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "jgxx",
+                  "name": "机构信息"
+                }, {
+                  "id": "14",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "dqjs",
+                  "name": "地区介绍"
+                }, {
+                  "id": "15",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "czxx",
+                  "name": "财政信息"
+                }, {
+                  "id": "16",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "zdxm",
+                  "name": "重大项目"
+                }, {
+                  "id": "17",
+                  "isNewRecord": false,
+                  "parentId": "1",
+                  "code": "tjxx",
+                  "name": "统计信息"
+                }],
+                "name": "信息公开"
+              }, {
+                "id": "18",
+                "isNewRecord": false,
+                "parentId": "0",
+                "code": "hdjl",
+                "children": [{
+                  "id": "19",
+                  "isNewRecord": false,
+                  "parentId": "18",
+                  "code": "zwfw",
+                  "name": "政务咨询（留言、领导信箱、咨询等）"
+                }, {
+                  "id": "20",
+                  "isNewRecord": false,
+                  "parentId": "18",
+                  "code": "tsjb",
+                  "name": "投诉举报"
+                }, {
+                  "id": "21",
+                  "isNewRecord": false,
+                  "parentId": "18",
+                  "code": "zjdc",
+                  "name": "调查征集"
+                }, {
+                  "id": "22",
+                  "isNewRecord": false,
+                  "parentId": "18",
+                  "code": "zxft",
+                  "name": "在线访谈"
+                }, {
+                  "id": "23",
+                  "isNewRecord": false,
+                  "parentId": "18",
+                  "code": "tyjlpt",
+                  "name": "统一交流平台"
+                }],
+                "name": "互动交流"
+              }, {
+                "id": "24",
+                "isNewRecord": false,
+                "parentId": "0",
+                "code": "wsbs",
+                "children": [{
+                  "id": "25",
+                  "isNewRecord": false,
+                  "parentId": "24",
+                  "code": "bszn",
+                  "name": "办事指南"
+                }, {
+                  "id": "26",
+                  "isNewRecord": false,
+                  "parentId": "24",
+                  "code": "zxbs",
+                  "children": [{
+                    "id": "42",
+                    "isNewRecord": false,
+                    "parentId": "26",
+                    "code": "zxsq",
+                    "name": "在线申请"
+                  }, {
+                    "id": "43",
+                    "isNewRecord": false,
+                    "parentId": "26",
+                    "code": "jggs",
+                    "name": "结果公示"
+                  }, {
+                    "id": "44",
+                    "isNewRecord": false,
+                    "parentId": "26",
+                    "code": "bstj",
+                    "name": "办事统计"
+                  }],
+                  "name": "在线办事（辅助功能）"
+                }, {
+                  "id": "27",
+                  "isNewRecord": false,
+                  "parentId": "24",
+                  "code": "qlqd",
+                  "name": "权力清单"
+                }, {
+                  "id": "28",
+                  "isNewRecord": false,
+                  "parentId": "24",
+                  "code": "mslyzt",
+                  "name": "民生领域专题"
+                }, {
+                  "id": "29",
+                  "isNewRecord": false,
+                  "parentId": "24",
+                  "code": "qykb",
+                  "name": "企业开办"
+                }],
+                "name": "网上办事"
+              }, {
+                "id": "30",
+                "isNewRecord": false,
+                "parentId": "0",
+                "code": "sjkf",
+                "children": [{
+                  "id": "31",
+                  "isNewRecord": false,
+                  "parentId": "30",
+                  "code": "fwgn",
+                  "name": "服务功能"
+                }, {
+                  "id": "32",
+                  "isNewRecord": false,
+                  "parentId": "30",
+                  "code": "znwd",
+                  "name": "智能问答"
+                }, {
+                  "id": "33",
+                  "isNewRecord": false,
+                  "parentId": "30",
+                  "code": "znss",
+                  "name": "智能搜索"
+                }, {
+                  "id": "45",
+                  "isNewRecord": false,
+                  "parentId": "30",
+                  "code": "zsjkf",
+                  "name": "数据开放"
+                }],
+                "name": "数据开放"
+              }],
+              layout: layout
+          });
+
+          form.render();
+      });
+    })
+  })
+})
+</script>
+
+</html>
